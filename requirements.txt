@@ -2,6 +2,6 @@ streamlit
 numpy
 pandas
 openpyxl
-yfinan
+yfinance
 plotly.express
 datetime
