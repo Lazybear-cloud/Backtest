@@ -145,13 +145,7 @@ total_amount = adj_close_data['현재금액'].sum()
 total_rate = ((total_amount / total_invest)*100).round(1)
 
 col2.write(f"투자금액 : {total_invest:,}원")
-
-col2.write("")
-
 col2.write(f"투자 수익률 : {total_rate:,}%")
-
-col2.write("")
-
 col2.write(f"최종 금액 : {total_amount:,}원")
 
 
