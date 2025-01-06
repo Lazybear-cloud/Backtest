@@ -44,7 +44,7 @@ def get_stock_data(ticker, start, end):
 
 
 stock_data = get_stock_data(selected_ticker, start_date, end_date)
-
+st.dataframe(stock_data)
 
 
 
@@ -150,21 +150,11 @@ col2.write(f"최종 금액 : {total_amount:,}원")
 
 
 
-
-
-
 st.title(f"{selected_ticker}")
 
 # 월말 Adj Close 데이터 시각화
 fig = px.line(adj_close_data, x="Date", y="Stock Price")
 st.plotly_chart(fig)
-
-
-
-
-
-
-
 
 
 
