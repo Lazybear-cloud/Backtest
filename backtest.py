@@ -44,8 +44,6 @@ def get_stock_data(ticker, start, end):
 
 
 stock_data = get_stock_data(selected_ticker, start_date, end_date)
-st.dataframe(stock_data)
-
 
 
 
