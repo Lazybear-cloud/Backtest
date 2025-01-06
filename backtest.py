@@ -60,11 +60,11 @@ stock_data['YearMonth'] = stock_data['Date'].dt.to_period('M')  # 연도-월 단
 month_end_data = stock_data.groupby('YearMonth').tail(1)  # 각 월의 마지막 데이터 선택
 
 # Adj Close 열만 추출
-adj_close_data = month_end_data[['Date', 'Adj Close']]
+adj_close_data = month_end_data[['Date', 'Close']]
 
 
 # Adj Close 값을 소수점 2자리로 반올림
-adj_close_data['Adj Close'] = adj_close_data['Adj Close'].round(2)
+adj_close_data['Close'] = adj_close_data['Close'].round(2)
 
 
 # MultiIndex 헤더 처리
@@ -73,7 +73,7 @@ if isinstance(adj_close_data.columns, pd.MultiIndex):
 
 
 # end_date와 같은 날짜의 Adj Close 값 가져오기
-selected_date_adj_close = stock_data.loc[stock_data['Date'] == pd.to_datetime(end_date), 'Adj Close']
+selected_date_adj_close = stock_data.loc[stock_data['Date'] == pd.to_datetime(end_date), 'Close']
 
 # 값이 존재할 경우 처리
 if not selected_date_adj_close.empty:
@@ -82,7 +82,7 @@ else:
     # 정확히 end_date가 없으면 가장 가까운 이전 날짜의 값 선택
     closest_date_row = stock_data.loc[stock_data['Date'] <= pd.to_datetime(end_date)].tail(1)
     if not closest_date_row.empty:
-        selected_adj_close_value = closest_date_row['Adj Close'].values[0]
+        selected_adj_close_value = closest_date_row['Close'].values[0]
     else:
         selected_adj_close_value = None  # 데이터가 완전히 없을 경우 처리
 
@@ -91,11 +91,11 @@ if selected_adj_close_value is not None:
     selected_adj_close_value = round(float(selected_adj_close_value), 2)  # 단일 값으로 변환 후 반올림
 
 # 선택한 값을 모든 행에 반복적으로 할당
-adj_close_data['Selected Adj Close'] = [selected_adj_close_value] * len(adj_close_data)
+adj_close_data['Selected Close'] = [selected_adj_close_value] * len(adj_close_data)
 
 
 # 수익률 추가
-adj_close_data['수익률'] = (adj_close_data['Selected Adj Close'] / adj_close_data['Adj Close'] - 1) * 100
+adj_close_data['수익률'] = (adj_close_data['Selected Close'] / adj_close_data['Close'] - 1) * 100
 
 # 소수점 2자리로 반올림
 adj_close_data['수익률'] = adj_close_data['수익률'].round(0).astype(int)
@@ -112,7 +112,7 @@ adj_close_data['월 투자금'] = [invest] * len(adj_close_data)
 
 
 # 현재 금액 추가
-adj_close_data['현재금액'] = adj_close_data['월 투자금'] * (adj_close_data['Selected Adj Close'] / adj_close_data['Adj Close'])
+adj_close_data['현재금액'] = adj_close_data['월 투자금'] * (adj_close_data['Selected Close'] / adj_close_data['Close'])
 
 adj_close_data['현재금액'] = adj_close_data['현재금액'].round(0).astype(int)
 
@@ -132,8 +132,8 @@ end_date_str = end_date.strftime("%Y-%m-%d")
 st.write(f"{selected_ticker} backtest result from {start_date_str} to {end_date_str}")
 adj_close_data.rename(columns={
     'Date': 'Date', 
-    'Adj Close': 'Stock Price',
-    'Selected Adj Close': '현재가'
+    'Close': 'Stock Price',
+    'Selected Close': '현재가'
 }, inplace=True)
 
 
